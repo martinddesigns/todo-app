@@ -5,7 +5,7 @@ import Todo from './components/Todo/Todo'
 const App = () => {
   return (
     <Layout>
-      <Todo></Todo>
+      <Todo />
     </Layout>
   )
 }
