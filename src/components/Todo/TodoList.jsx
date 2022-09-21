@@ -1,4 +1,3 @@
-import React from 'react'
 import TodoForm from './TodoForm';
 import Todo from './Todo';
 
@@ -6,32 +5,44 @@ import Todo from './Todo';
 const TodoList = ({ todoList, setTodoList, edit, setEdit, setInput, input }) => {
   
   const getClickedItem = (e) => {
-    const curItem = e.target.parentNode
-    const curItemId = curItem.parentNode.getAttribute('data-key')
-
+    const curItemId = e.target.closest('.todo').getAttribute('data-key')
     return curItemId
   }
 
   const removeHandler = (e) => {
     const updatedList = todoList.filter((list) => getClickedItem(e) !== list.id)
     setTodoList(updatedList)
-    console.log(getClickedItem(e))
   }
 
   const editHandler = (e) => {
     const editEl = todoList.find(todo => todo.id === getClickedItem(e))
-    setInput({ todo: editEl.todo })
-    setEdit(true)
+    setEdit({isEditing: true, editId: editEl.id})
+    setInput({todo: editEl.todo, id: editEl.id})
+  }
+
+  const makeEditHandler = (e) => {
+    e.preventDefault();
+    const newTodos = todoList.map(task => {
+      if (task.id === edit.editId) {
+        return { ...task, todo: input.todo}
+      }
+      return task
+    })
+
+    setTodoList(newTodos)
+    setEdit({edit: false, editId: ''})
+    setInput({todo: ''})
   }
 
   return <>
-    <TodoForm
+    <TodoForm 
       input={input}
       setInput={setInput}
       setTodoList={setTodoList}
       todoList={todoList}
       setEdit={setEdit}
       edit={edit}
+      makeEditHandler={makeEditHandler}
     />
     
     <ul className="todo__list">

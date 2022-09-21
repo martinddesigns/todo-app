@@ -5,7 +5,7 @@ import TodoList from './components/Todo/TodoList';
 const App = () => {
   const [input, setInput] = useState({todo: ''});
   const [todoList, setTodoList] = useState([]);
-  const [edit, setEdit] = useState(false)
+  const [edit, setEdit] = useState({isEditing: false, editId: ''})
   
   return (
     <Layout>
