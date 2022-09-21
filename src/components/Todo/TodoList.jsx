@@ -1,30 +1,45 @@
 import React from 'react'
-import { FiXCircle, FiCheck, FiEdit } from "react-icons/fi";
+import TodoForm from './TodoForm';
+import Todo from './Todo';
 
 
-const TodoList = ({ todoList, setTodoList }) => {
-
-  const removeHandler = (e) => {
+const TodoList = ({ todoList, setTodoList, edit, setEdit, setInput, input }) => {
+  
+  const getClickedItem = (e) => {
     const curItem = e.target.parentNode
-    const removeId = curItem.parentNode.getAttribute('data-key')
-    const updatedList = todoList.filter((list) => removeId !== list.id)
-    setTodoList(updatedList)
+    const curItemId = curItem.parentNode.getAttribute('data-key')
+
+    return curItemId
   }
 
-  return (
+  const removeHandler = (e) => {
+    const updatedList = todoList.filter((list) => getClickedItem(e) !== list.id)
+    setTodoList(updatedList)
+    console.log(getClickedItem(e))
+  }
+
+  const editHandler = (e) => {
+    const editEl = todoList.find(todo => todo.id === getClickedItem(e))
+    setInput({ todo: editEl.todo })
+    setEdit(true)
+  }
+
+  return <>
+    <TodoForm
+      input={input}
+      setInput={setInput}
+      setTodoList={setTodoList}
+      todoList={todoList}
+      setEdit={setEdit}
+      edit={edit}
+    />
+    
     <ul className="todo__list">
       {todoList.map((list) => (
-        <li className='mb-10 last:mb-0 bg-cyan-500/50 rounded-10 px-10 py-5 flex items-center justify-between' key={list.id} data-key={list.id}>
-          {list.todo}
-          <span className='flex gap-5'>
-            <FiCheck className='cursor-pointer hover:stroke-green-500' />
-            <FiXCircle onClick={removeHandler} className='cursor-pointer hover:stroke-red-500' />
-            <FiEdit className='cursor-pointer hover:stroke-blue-500' />
-          </span>
-        </li>
+        <Todo edit={edit} todo={list.todo} editHandler={editHandler} removeHandler={removeHandler} key={list.id} id={list.id} />
       ))}
     </ul>
-  )
+  </>
 }
 
 export default TodoList

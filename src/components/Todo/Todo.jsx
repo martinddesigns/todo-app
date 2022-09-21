@@ -1,17 +1,17 @@
-import React, { useState } from 'react'
-import TodoForm from './TodoForm';
-import TodoList from './TodoList';
+import React from 'react'
+import { FiXCircle, FiCheck, FiEdit } from "react-icons/fi";
 
-const Todo = () => {
-  const [input, setInput] = useState({todo: ''});
-  const [todoList, setTodoList] = useState([]);
+const Todo = ({editHandler, removeHandler, todo, id}) => {
 
   return (
-    <div className="todo bg-white p-15 rounded-10">
-      <h1 className='mb-15 text-center'>Todo List</h1>
-      <TodoForm input={input} setInput={setInput} setTodoList={setTodoList} todoList={todoList} />
-      <TodoList todoList={todoList} setTodoList={setTodoList} />
-    </div>
+    <li data-key={id} className='mb-10 last:mb-0 bg-cyan-500/50 rounded-10 px-10 py-5 flex items-center justify-between'>
+      <p>{todo}</p>
+      <div className='flex gap-5'>
+        <FiCheck className='cursor-pointer hover:stroke-green-500' />
+        <FiXCircle onClick={removeHandler} className='cursor-pointer hover:stroke-red-500' />
+        <FiEdit onClick={editHandler} className='cursor-pointer hover:stroke-blue-500' />
+      </div>
+    </li>
   )
 }
 
